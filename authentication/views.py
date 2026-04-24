@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import update_last_login
 from django.db import transaction
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 import logging
 
 logger = logging.getLogger(__name__)
@@ -149,3 +150,39 @@ class UserLoginView(APIView):
         except Exception as e:
             logger.error(f"Error during user login: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class HandleLogout(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+        # Get the refresh token from the request data
+            refresh_token = request.data.get('refresh')
+            # print(refresh_token)
+            
+            if not refresh_token:
+                return Response(
+                    {"error": "Refresh token is required."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Create a RefreshToken instance and blacklist it
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            
+            return Response(
+                {"message": "Successfully logged out."},
+                status=status.HTTP_200_OK
+            )
+            
+        except TokenError as e:
+            return Response(
+                {"error": "Invalid or expired token."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )    

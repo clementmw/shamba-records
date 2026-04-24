@@ -151,7 +151,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 AUTH_USER_MODEL = "authentication.User" 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5175",
+    "http://localhost:8080",
     "http://localhost:5173",
 
 ]

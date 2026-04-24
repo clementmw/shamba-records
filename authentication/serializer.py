@@ -79,12 +79,9 @@ class AdminProfileSerializer(serializers.Serializer):
 
 
 class AgentProfileSerializer(serializers.ModelSerializer):
-    assigned_fields_count = serializers.SerializerMethodField()
 
     class Meta:
         from field.models import Agents  
         model = Agents
-        fields = ['id', 'assigned_fields_count']
+        fields = '__all__'
 
-    def get_assigned_fields_count(self, obj):
-        return obj.assigned_fields.count()

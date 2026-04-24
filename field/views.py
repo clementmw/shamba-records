@@ -14,7 +14,7 @@ class FieldManagementView(APIView):
 
     def get(self, request):
         try:
-            fields = FieldManagement.objects.select_related('assigned_agent__user').all()
+            fields = FieldManagement.objects.select_related('assigned_agent__user').all().order_by('-created_at')
             paginator = CustomPagination()
             paginated_fields = paginator.paginate_queryset(fields, request)
             serializer = FieldManagementSerializer(paginated_fields, many=True)
