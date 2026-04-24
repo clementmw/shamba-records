@@ -1,6 +1,5 @@
 .env
 testenv
-migrations/
 staticfiles/
 *.sqlite3
 __pycache__
